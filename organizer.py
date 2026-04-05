@@ -89,6 +89,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help=argparse.SUPPRESS,
     )
+    parser.add_argument(
+        "--install",
+        action="store_true",
+        help="Install the organizer to ~/.local/bin for global use.",
+    )
     return parser
 
 
@@ -350,6 +355,36 @@ def validate_command_args(args, parser):
     if args.status and (args.start or args.stop or args.daemon):
         parser.error("--status cannot be combined with --start, --stop, or --daemon.")
 
+def install_binary():
+    import shutil
+
+    if not getattr(sys, "frozen", False):
+        log("Install is only supported for the compiled binary.", level="ERROR")
+        return 1
+
+    source_path = Path(sys.executable).resolve()
+    target_dir = Path.home() / ".local" / "bin"
+    target_path = target_dir / "organizer"
+
+    try:
+        target_dir.mkdir(parents=True, exist_ok=True)
+
+        # Copy instead of move (safer)
+        shutil.copy2(source_path, target_path)
+
+        # Ensure executable permission
+        target_path.chmod(0o755)
+
+    except Exception as e:
+        log(f"Installation failed: {e}", level="ERROR")
+        return 1
+
+    log(f"Installed successfully at {target_path}")
+
+    log("You can now run:")
+    print(f"\n  organizer --install-autostart\n")
+
+    return 0
 
 def main() -> int:
     parser = build_parser()
@@ -360,7 +395,9 @@ def main() -> int:
         return run_service(args, log_to_file=True, manage_pid=True)
 
     configure_logging()
-
+    
+    if args.install:
+        return install_binary()
     if args.stop:
         return stop_background_service()
     if args.status:
