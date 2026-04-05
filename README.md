@@ -1,10 +1,32 @@
 # Auto File Organizer
 
-Auto File Organizer is a small desktop automation tool that watches a folder such as `Downloads` and sorts files into folders like `Images`, `PDFs`, `Videos`, `Documents`, and `Archives`.
+Auto File Organizer automatically cleans your Downloads folder by sorting files into folders like Images, PDFs, Videos, and more.
 
-It is event-driven, which means it reacts to file system events instead of scanning in a loop. That keeps CPU usage low while still organizing files automatically.
+It runs in the background and requires no manual work after setup.
 
-## What It Does
+## Quick Setup (Recommended)
+
+Download the executable from the Releases page.
+
+Then run:
+
+```bash
+chmod +x organizer
+./organizer --install-autostart
+```
+
+That's it. Your files will now be organized automatically.
+
+## For Users
+
+### How It Works (Simple)
+
+1. Run the installer command once
+2. The app starts automatically in the background
+3. Files in your Downloads folder are organized automatically
+4. You do not need to keep starting it manually
+
+### What It Does
 
 - Organizes files already in the watched folder when the app starts
 - Watches for newly created files and organizes them automatically
@@ -13,9 +35,9 @@ It is event-driven, which means it reacts to file system events instead of scann
 - Renames duplicates safely, such as `file.pdf` to `file(1).pdf`
 - Ignores temporary download files like `.tmp` and `.crdownload`
 - Waits for file size to stabilize before moving a file
-- Supports foreground mode, background mode, and boot auto-start
+- Supports background mode and auto-start on boot
 
-## Default Categories
+### Default Categories
 
 By default, files are sorted into:
 
@@ -26,177 +48,83 @@ By default, files are sorted into:
 - `Archives`
 - `Others`
 
-You can change these rules in [config.json](/home/sahal/Projects/auto-file-organizer/config.json).
+You can change these rules in `config.json`.
 
-## Requirements
-
-- Python 3
-- `watchdog`
-
-If you want to build a standalone executable:
-
-- `PyInstaller`
-
-## Installation
-
-### Run From Source
-
-1. Open a terminal in the project folder.
-2. Create and activate a virtual environment if you want one.
-3. Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-### Build an Executable
-
-```bash
-pip install -r requirements-dev.txt
-python build_executable.py
-```
-
-On Linux and macOS, the executable will be created at:
-
-```bash
-dist/organizer
-```
-
-On Windows, it will be:
-
-```bash
-dist\organizer.exe
-```
-
-## Quick Start
-
-Run in the foreground with the default folder:
-
-```bash
-python organizer.py
-```
-
-Watch a custom folder:
-
-```bash
-python organizer.py --path ~/Downloads
-```
-
-Simulate organizing without moving files:
-
-```bash
-python organizer.py --dry-run
-```
-
-If you built the executable:
-
-```bash
-./dist/organizer
-```
-
-## Background Commands
+### Daily Commands
 
 Start the organizer in the background:
 
 ```bash
-python organizer.py --start
+./organizer --start
 ```
 
 Check whether it is running:
 
 ```bash
-python organizer.py --status
+./organizer --status
 ```
 
 Stop it:
 
 ```bash
-python organizer.py --stop
+./organizer --stop
 ```
 
-The executable supports the same commands:
+Install auto-start on boot:
 
 ```bash
-./dist/organizer --start
-./dist/organizer --status
-./dist/organizer --stop
-```
-
-## Auto-Start on Boot
-
-Install auto-start for the current operating system:
-
-```bash
-python organizer.py --install-autostart
+./organizer --install-autostart
 ```
 
 Check auto-start status:
 
 ```bash
-python organizer.py --autostart-status
+./organizer --autostart-status
 ```
 
 Remove auto-start:
 
 ```bash
-python organizer.py --uninstall-autostart
+./organizer --uninstall-autostart
 ```
 
-On Linux, this creates a `systemd` user service.
+### Uninstall
 
-## Configuration
-
-The default configuration file looks like this:
-
-```json
-{
-  "rules": {
-    "Images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".svg"],
-    "PDFs": [".pdf"],
-    "Videos": [".mp4", ".mov", ".avi", ".mkv", ".webm"],
-    "Documents": [".doc", ".docx", ".txt", ".rtf", ".odt"],
-    "Archives": [".zip", ".rar", ".7z", ".tar", ".gz"]
-  },
-  "default_category": "Others",
-  "ignored_extensions": [".tmp", ".crdownload", ".swp", ".part"],
-  "stability": {
-    "checks": 3,
-    "delay_seconds": 0.5
-  }
-}
-```
-
-Use a custom config file like this:
+Stop the organizer:
 
 ```bash
-python organizer.py --config /path/to/config.json
+./organizer --stop
 ```
 
-## How Organizing Works
-
-When the program starts, it:
-
-1. Loads the configuration
-2. Organizes files already in the top level of the watched folder
-3. Starts watching for new files
-4. Waits until a new file is stable
-5. Moves the file into the correct folder
-
-Files already inside subfolders are left alone.
-
-## Logs
-
-Foreground runs log to the terminal.
-
-Background runs log to:
+Remove auto-start:
 
 ```bash
-logs/organizer.log
+./organizer --uninstall-autostart
 ```
 
-## Example
+### Troubleshooting
 
-If your watched folder contains:
+If the organizer is not running:
+
+```bash
+./organizer --status
+```
+
+If needed, restart it:
+
+```bash
+./organizer --start
+```
+
+If you want to test without moving files:
+
+```bash
+./organizer --dry-run
+```
+
+### Example
+
+If your Downloads folder contains:
 
 ```text
 Downloads/
@@ -220,7 +148,111 @@ Downloads/
   Others/unknown.xyz
 ```
 
-## Testing
+### Logs
+
+Background runs write logs to:
+
+```bash
+logs/organizer.log
+```
+
+## For Developers
+
+### Requirements
+
+- Python 3
+- `watchdog`
+
+If you want to build a standalone executable:
+
+- `PyInstaller`
+
+### Run From Source
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run in the foreground with the default folder:
+
+```bash
+python organizer.py
+```
+
+Watch a custom folder:
+
+```bash
+python organizer.py --path ~/Downloads
+```
+
+Use a custom config file:
+
+```bash
+python organizer.py --config /path/to/config.json
+```
+
+Simulate organizing without moving files:
+
+```bash
+python organizer.py --dry-run
+```
+
+### Build an Executable
+
+```bash
+pip install -r requirements-dev.txt
+python build_executable.py
+```
+
+On Linux and macOS, the executable will be created at:
+
+```bash
+dist/organizer
+```
+
+On Windows, it will be:
+
+```bash
+dist\organizer.exe
+```
+
+### Configuration
+
+The default configuration file looks like this:
+
+```json
+{
+  "rules": {
+    "Images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".svg"],
+    "PDFs": [".pdf"],
+    "Videos": [".mp4", ".mov", ".avi", ".mkv", ".webm"],
+    "Documents": [".doc", ".docx", ".txt", ".rtf", ".odt"],
+    "Archives": [".zip", ".rar", ".7z", ".tar", ".gz"]
+  },
+  "default_category": "Others",
+  "ignored_extensions": [".tmp", ".crdownload", ".swp", ".part"],
+  "stability": {
+    "checks": 3,
+    "delay_seconds": 0.5
+  }
+}
+```
+
+### How Organizing Works
+
+When the program starts, it:
+
+1. Loads the configuration
+2. Organizes files already in the top level of the watched folder
+3. Starts watching for new files
+4. Waits until a new file is stable
+5. Moves the file into the correct folder
+
+Files already inside subfolders are left alone.
+
+### Testing
 
 Run the tests with:
 
@@ -228,16 +260,16 @@ Run the tests with:
 python -m unittest discover -s tests -v
 ```
 
-## Project Files
+### Project Files
 
-- [organizer.py](/home/sahal/Projects/auto-file-organizer/organizer.py): CLI entry point
-- [watcher.py](/home/sahal/Projects/auto-file-organizer/watcher.py): file watching and startup scan
-- [mover.py](/home/sahal/Projects/auto-file-organizer/mover.py): safe file moving and duplicate handling
-- [rules.py](/home/sahal/Projects/auto-file-organizer/rules.py): rule engine and config loading
-- [utils.py](/home/sahal/Projects/auto-file-organizer/utils.py): logging, PID handling, and helpers
-- [autostart.py](/home/sahal/Projects/auto-file-organizer/autostart.py): OS-specific auto-start support
+- `organizer.py`: CLI entry point
+- `watcher.py`: file watching and startup scan
+- `mover.py`: safe file moving and duplicate handling
+- `rules.py`: rule engine and config loading
+- `utils.py`: logging, PID handling, and helpers
+- `autostart.py`: OS-specific auto-start support
 
-## Notes
+### Notes
 
 - The organizer only moves top-level files in the watched folder during startup scan.
 - Duplicate names are preserved by renaming instead of overwriting.
