@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "Images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".svg"],
+    "PDFs": [".pdf"],
+    "Videos": [".mp4", ".mov", ".avi", ".mkv", ".webm"],
+    "Documents": [".doc", ".docx", ".txt", ".rtf", ".odt"],
+    "Archives": [".zip", ".rar", ".7z", ".tar", ".gz"]
+  },
+  "default_category": "Others",
+  "ignored_extensions": [".tmp", ".crdownload", ".swp", ".part"],
+  "stability": {
+    "checks": 3,
+    "delay_seconds": 0.5
+  }
+}

@@ -1,0 +1,13 @@
+[11:20:29] [ERROR] watchdog is not installed. Install it with: pip install watchdog
+[11:20:42] [INFO] Background organizer started with PID 3.
+[11:20:42] [INFO] Scanning existing files in /tmp/auto-file-organizer-smoke before live watching starts.
+[11:20:42] [INFO] Initial scan found no top-level files to organize.
+[11:20:42] [INFO] Watching /tmp/auto-file-organizer-smoke in dry-run mode.
+[11:22:39] [INFO] Background organizer started with PID 15484.
+[11:22:39] [INFO] Scanning existing files in /home/sahal/Downloads before live watching starts.
+[11:22:39] [INFO] Initial scan found no top-level files to organize.
+[11:22:39] [INFO] Watching /home/sahal/Downloads in live mode.
+[11:52:05] [INFO] Detected file: test.jpg
+[11:52:07] [INFO] Moved test.jpg -> Images/test.jpg
+[11:52:07] [INFO] Detected file: test.pdf
+[11:52:08] [INFO] Moved test.pdf -> PDFs/test.pdf
