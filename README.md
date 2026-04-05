@@ -1,81 +1,97 @@
 # Auto File Organizer
 
-Auto File Organizer automatically sorts files in a folder into categories like Images, PDFs, Videos, and more.
+Auto File Organizer automatically organizes files in a selected folder (e.g., `Downloads`) into categories such as Images, PDFs, Videos, and more.
 
-After setup, it runs in the background and organizes files as they appear.
-
----
-
-## Download
-
-Download the latest version from the **Releases** page.
+Once set up, it runs in the background and requires no manual intervention.
 
 ---
 
-## Quick Setup (Linux)
+## 🚀 Features
+
+* Automatically sorts files into categorized folders
+* Creates folders if they do not exist
+* Safely renames duplicate files (e.g., `file.jpg` → `file(1).jpg`)
+* Ignores temporary/incomplete download files (`.tmp`, `.crdownload`, etc.)
+* Waits until downloads are complete before organizing
+* Uses event-driven file watching (low CPU usage)
+
+---
+
+## 📥 Download
+
+Download the latest Linux binary from the **Releases** page.
+
+---
+
+## ⚙️ Quick Setup (Linux)
 
 After downloading:
 
 ```bash
 cd ~/Downloads
 chmod +x organizer-linux
-./organizer-linux --install-autostart
+./organizer-linux --install
+organizer --install-autostart
 ```
 
-That’s it. The organizer will now run automatically in the background.
+The organizer will now run automatically in the background.
 
 ---
 
-## Use a Different Folder
+## 📂 Use a Different Folder
 
-By default, it watches your Downloads folder.
----
-To organize another folder:
+By default, the organizer watches your `Downloads` folder.
+
+To organize another folder (e.g., `Desktop`):
 
 ```bash
-cd ~/Downloads
-./organizer-linux --install-autostart --path ~/Desktop
+organizer --install-autostart --path ~/Desktop
 ```
 
 ---
 
-## Check Status
+## 🧰 Common Commands
+
+### Check status
 
 ```bash
-./organizer-linux --status
+organizer --status
 ```
 
----
-
-## Stop
+### Start the organizer
 
 ```bash
-./organizer-linux --stop
+organizer --start
 ```
 
----
-
-## Remove (Uninstall)
+### Stop the organizer
 
 ```bash
-./organizer-linux --uninstall-autostart
+organizer --stop
+```
+
+### Restart (if needed)
+
+```bash
+organizer --stop
+organizer --start
 ```
 
 ---
 
-## What It Does
+## 🗑️ Uninstall
 
-* Moves files into folders like `Images`, `PDFs`, `Videos`, etc.
-* Creates folders automatically if needed
-* Renames duplicates safely (`file(1).jpg`)
-* Ignores temporary download files
-* Waits for files to finish downloading before moving them
+```bash
+organizer --stop
+organizer --uninstall-autostart
+rm ~/.local/bin/organizer
+```
 
 ---
 
-## Example
+## 📌 Example
 
-Before:
+### Before
 
 ```
 Downloads/
@@ -84,7 +100,7 @@ Downloads/
   video.mp4
 ```
 
-After:
+### After
 
 ```
 Downloads/
@@ -95,15 +111,16 @@ Downloads/
 
 ---
 
-## Notes
+## ℹ️ Notes
 
-* Only files in the top level of the folder are organized
-* Files may not move immediately while they are still downloading
+* Only top-level files in the folder are organized
+* Files may not move immediately while still downloading
+* Runs as a background service using `systemd` (Linux)
 
 ---
 
-## Platform Support
+## 💻 Platform Support
 
-* Linux: Available
-* Windows: Coming soon
-* macOS: Coming soon
+* Linux: ✅ Available
+* Windows: ⏳ Coming soon
+* macOS: ⏳ Coming soon
