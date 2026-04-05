@@ -1,5 +1,6 @@
 import logging
 import os
+from signal import signal
 import sys
 import time
 from pathlib import Path
@@ -145,17 +146,49 @@ def wait_for_stable_file(path, checks=3, delay_seconds=0.5, missing_tolerance=2)
 
     return False
 
+import os
+import subprocess
+
 def kill_all_organizer_processes():
     """
-    Kill all running organizer processes (binary + python).
-    Safe fallback cleanup.
+    Kill all organizer processes safely (excluding current process).
+    Only targets actual organizer instances.
     """
+    current_pid = os.getpid()
+
     try:
-        subprocess.run(
-            ["pkill", "-f", "organizer"],
-            check=False,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+        result = subprocess.run(
+            ["pgrep", "-af", "organizer"],
+            capture_output=True,
+            text=True,
         )
     except Exception:
-        pass
+        return
+
+    for line in result.stdout.strip().split("\n"):
+        if not line:
+            continue
+
+        parts = line.strip().split(maxsplit=1)
+        if not parts:
+            continue
+
+        try:
+            pid = int(parts[0])
+        except ValueError:
+            continue
+
+        cmd = parts[1] if len(parts) > 1 else ""
+
+        # Skip current process
+        if pid == current_pid:
+            continue
+
+        # Only kill real organizer processes
+        if "organizer-linux" not in cmd and "organizer.py" not in cmd:
+            continue
+
+        try:
+            os.kill(pid, signal.SIGTERM)
+        except Exception:
+            pass
