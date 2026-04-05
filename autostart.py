@@ -115,7 +115,7 @@ def build_linux_service_content(command):
             "[Service]",
             f"ExecStart={shlex.join(command)}",
             f"WorkingDirectory={get_app_root()}",
-            "Restart=always",
+            "Restart=on-failure",
             "RestartSec=2",
             "",
             "[Install]",

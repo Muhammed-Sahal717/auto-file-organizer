@@ -11,3 +11,9 @@
 [11:52:07] [INFO] Moved test.jpg -> Images/test.jpg
 [11:52:07] [INFO] Detected file: test.pdf
 [11:52:08] [INFO] Moved test.pdf -> PDFs/test.pdf
+[12:52:03] [INFO] Detected file: JKhuUDRN
+[12:52:03] [WARNING] Skipped unstable or missing file: JKhuUDRN
+[12:52:03] [INFO] Detected file: JKhuUDRN.part
+[12:52:03] [INFO] Ignored temporary file: JKhuUDRN.part
+[12:52:03] [INFO] Detected file: organizer-linux
+[12:52:04] [INFO] Moved organizer-linux -> Others/organizer-linux
