@@ -17,3 +17,46 @@
 [12:52:03] [INFO] Ignored temporary file: JKhuUDRN.part
 [12:52:03] [INFO] Detected file: organizer-linux
 [12:52:04] [INFO] Moved organizer-linux -> Others/organizer-linux
+[13:48:16] [INFO] Detected file: 3D_rotation_with_202603241413.mp4
+[13:48:18] [INFO] Moved 3D_rotation_with_202603241413.mp4 -> Videos/3D_rotation_with_202603241413.mp4
+[13:48:22] [INFO] Detected file: Pasted text.txt
+[13:48:24] [INFO] Moved Pasted text.txt -> Documents/Pasted text.txt
+[13:48:24] [INFO] Detected file: test.txt
+[13:48:26] [INFO] Moved test.txt -> Documents/test.txt
+[13:48:29] [INFO] Detected file: Pasted text.txt
+[13:48:30] [INFO] Moved Pasted text.txt -> Documents/Pasted text(1).txt
+[13:49:37] [INFO] Detected file: ezgif-272a932856f81cdd-jpg.zip
+[13:49:39] [INFO] Moved ezgif-272a932856f81cdd-jpg.zip -> Archives/ezgif-272a932856f81cdd-jpg.zip
+[13:51:44] [INFO] Detected file: ezgif-272a932856f81cdd-jpg.zip
+[13:51:45] [INFO] Moved ezgif-272a932856f81cdd-jpg.zip -> Archives/ezgif-272a932856f81cdd-jpg.zip
+[13:53:29] [INFO] Detected file: 5826679.jpg
+[13:53:31] [INFO] Moved 5826679.jpg -> Images/5826679(1).jpg
+[13:53:31] [INFO] Detected file: 5826754.jpg
+[13:53:32] [INFO] Moved 5826754.jpg -> Images/5826754(1).jpg
+[13:53:32] [INFO] Detected file: 5826798.jpg
+[13:53:34] [INFO] Moved 5826798.jpg -> Images/5826798(1).jpg
+[13:53:34] [INFO] Detected file: basheer.jpeg
+[13:53:35] [INFO] Moved basheer.jpeg -> Images/basheer(1).jpeg
+[13:53:35] [INFO] Detected file: ChatGPT Image Mar 24, 2026, 02_04_57 PM.png
+[13:53:37] [INFO] Moved ChatGPT Image Mar 24, 2026, 02_04_57 PM.png -> Images/ChatGPT Image Mar 24, 2026, 02_04_57 PM(1).png
+[13:53:37] [INFO] Detected file: ChatGPT Image Mar 24, 2026, 02_07_19 PM.png
+[13:53:38] [INFO] Moved ChatGPT Image Mar 24, 2026, 02_07_19 PM.png -> Images/ChatGPT Image Mar 24, 2026, 02_07_19 PM(1).png
+[13:53:38] [INFO] Detected file: Gemini_Generated_Image_qql2lbqql2lbqql2.png
+[13:53:40] [INFO] Moved Gemini_Generated_Image_qql2lbqql2lbqql2.png -> Images/Gemini_Generated_Image_qql2lbqql2lbqql2(2).png
+[13:53:40] [INFO] Detected file: Gemini_Generated_Image_qql2lbqql2lbqql2(1).png
+[13:53:41] [INFO] Moved Gemini_Generated_Image_qql2lbqql2lbqql2(1).png -> Images/Gemini_Generated_Image_qql2lbqql2lbqql2(1)(1).png
+[13:53:41] [INFO] Detected file: profile.png
+[13:53:43] [INFO] Moved profile.png -> Images/profile(2).png
+[13:53:43] [INFO] Detected file: profile(1).png
+[13:53:44] [INFO] Moved profile(1).png -> Images/profile(1)(1).png
+[13:53:44] [INFO] Detected file: Whisk_1e9e7dc86382622b3cc47ee8f3508062dr.jpeg
+[13:53:46] [INFO] Moved Whisk_1e9e7dc86382622b3cc47ee8f3508062dr.jpeg -> Images/Whisk_1e9e7dc86382622b3cc47ee8f3508062dr(1).jpeg
+[13:53:46] [INFO] Detected file: Whisk_4005f58c2272357a3b144ac41e9af96cdr.jpeg
+[13:53:47] [INFO] Moved Whisk_4005f58c2272357a3b144ac41e9af96cdr.jpeg -> Images/Whisk_4005f58c2272357a3b144ac41e9af96cdr(1).jpeg
+[13:53:47] [INFO] Detected file: Whisk_bc3dda45833b6cc8b614264a6c7f8691dr.jpeg
+[13:53:49] [INFO] Moved Whisk_bc3dda45833b6cc8b614264a6c7f8691dr.jpeg -> Images/Whisk_bc3dda45833b6cc8b614264a6c7f8691dr(1).jpeg
+[13:59:33] [INFO] Detected file: sample.pdf
+[13:59:35] [INFO] Moved sample.pdf -> PDFs/sample.pdf
+[14:02:38] [INFO] Detected file: test6.jpg
+[14:02:39] [INFO] Moved test6.jpg -> Images/test6.jpg
+[14:04:54] [INFO] Stopping watcher...

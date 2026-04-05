@@ -3,6 +3,8 @@ import os
 import sys
 import time
 from pathlib import Path
+import subprocess
+
 
 
 def get_app_root() -> Path:
@@ -142,3 +144,18 @@ def wait_for_stable_file(path, checks=3, delay_seconds=0.5, missing_tolerance=2)
         time.sleep(delay_seconds)
 
     return False
+
+def kill_all_organizer_processes():
+    """
+    Kill all running organizer processes (binary + python).
+    Safe fallback cleanup.
+    """
+    try:
+        subprocess.run(
+            ["pkill", "-f", "organizer"],
+            check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    except Exception:
+        pass

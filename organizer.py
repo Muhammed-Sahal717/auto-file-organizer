@@ -26,6 +26,7 @@ from utils import (
     process_is_running,
     remove_pid_file,
     write_pid_file,
+    kill_all_organizer_processes,
 )
 from watcher import organize_existing_files, start_watcher
 
@@ -153,49 +154,37 @@ def report_status():
 
 
 def stop_background_service():
+    stopped_any = False
+
+    # 1. Stop systemd service if exists
     if linux_service_installed():
-        if not linux_service_is_active():
-            remove_pid_file()
-            log("Organizer service is already stopped.")
-            return 0
+        if linux_service_is_active():
+            if stop_linux_service():
+                log("Stopped systemd service.")
+                stopped_any = True
 
-        if not stop_linux_service():
-            return 1
-
-        for _ in range(50):
-            if not linux_service_is_active() and get_running_pid() is None:
-                remove_pid_file()
-                log("Organizer service stopped.")
-                return 0
-            time.sleep(0.1)
-
-        log("Organizer service did not stop within the timeout.", level="ERROR")
-        return 1
-
+    # 2. Stop PID-based process
     pid = get_running_pid()
-    if pid is None:
+    if pid is not None:
+        try:
+            os.kill(pid, signal.SIGTERM)
+            log(f"Sent stop signal to organizer process {pid}.")
+            stopped_any = True
+        except ProcessLookupError:
+            log("Process already stopped.", level="WARNING")
+
+    # 3. Kill ALL leftover processes (IMPORTANT FIX)
+    kill_all_organizer_processes()
+
+    # 4. Cleanup PID file
+    remove_pid_file()
+
+    if stopped_any:
+        log("Organizer stopped.")
+    else:
         log("Organizer is not running.")
-        return 0
 
-    try:
-        os.kill(pid, signal.SIGTERM)
-    except ProcessLookupError:
-        remove_pid_file()
-        log("Removed stale PID file. Organizer was not running.", level="WARNING")
-        return 0
-
-    log(f"Sent stop signal to organizer process {pid}.")
-
-    for _ in range(50):
-        if not process_is_running(pid):
-            remove_pid_file()
-            log("Organizer stopped.")
-            return 0
-        time.sleep(0.1)
-
-    log(f"Organizer process {pid} did not stop within the timeout.", level="ERROR")
-    return 1
-
+    return 0
 
 def start_background_service(args):
     if linux_service_installed():
@@ -224,8 +213,20 @@ def start_background_service(args):
         return 1
 
     running_pid = get_running_pid()
+
     if running_pid is not None:
         log(f"Organizer is already running with PID {running_pid}.")
+        return 1
+
+    # Extra safety: prevent duplicate instances (python + binary)
+    existing = subprocess.run(
+        ["pgrep", "-f", "organizer-linux"],
+        capture_output=True,
+        text=True,
+    )
+
+    if existing.stdout.strip():
+        log("Another organizer instance is already running.")
         return 1
 
     process = subprocess.Popen(
@@ -253,6 +254,12 @@ def start_background_service(args):
 
 def run_service(args, log_to_file=False, manage_pid=False):
     configure_logging(log_to_file=log_to_file)
+
+    # Prevent multiple service instances
+    existing_pid = get_running_pid()
+    if existing_pid is not None and existing_pid != os.getpid():
+        log(f"Another organizer instance is already running with PID {existing_pid}. Exiting.")
+        return 1
 
     runtime = load_runtime(args)
     if runtime is None:
