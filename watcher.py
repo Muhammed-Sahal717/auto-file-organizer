@@ -97,6 +97,9 @@ class OrganizerEventHandler:
             def on_created(self, event):
                 self.outer.handle_created(event)
 
+            def on_moved(self, event):
+                self.outer.handle_moved(event)
+
         self._handler = _Handler(self)
         self.watch_path = Path(watch_path)
         self.rule_engine = rule_engine
@@ -108,14 +111,15 @@ class OrganizerEventHandler:
     def handler(self):
         return self._handler
 
-    def handle_created(self, event):
-        if event.is_directory:
+    def _is_top_level_file(self, file_path):
+        return Path(file_path).parent == self.watch_path
+
+    def _handle_arrival(self, file_path, event_label):
+        src_path = Path(file_path)
+        if not self._is_top_level_file(src_path):
             return
 
-        src_path = Path(event.src_path)
-        file_name = src_path.name
-
-        log(f"Detected file: {file_name}")
+        log(f"{event_label}: {src_path.name}")
         organize_file(
             src_path=src_path,
             watch_path=self.watch_path,
@@ -124,6 +128,18 @@ class OrganizerEventHandler:
             stability_checks=self.stability_checks,
             stability_delay=self.stability_delay,
         )
+
+    def handle_created(self, event):
+        if event.is_directory:
+            return
+
+        self._handle_arrival(event.src_path, "Detected file")
+
+    def handle_moved(self, event):
+        if event.is_directory:
+            return
+
+        self._handle_arrival(event.dest_path, "Detected moved file")
 
 
 def start_watcher(

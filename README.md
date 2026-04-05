@@ -2,20 +2,42 @@
 
 Auto File Organizer automatically cleans your Downloads folder by sorting files into folders like Images, PDFs, Videos, and more.
 
-It runs in the background and requires no manual work after setup.
+It runs silently in the background after setup and keeps your files organized without any manual effort.
 
 ## Quick Setup (Recommended)
 
-Download the executable from the Releases page.
+Download the executable from the [Releases](../../releases) page.
 
-Then run:
+### Linux / macOS
 
 ```bash
 chmod +x organizer
 ./organizer --install-autostart
 ```
 
+### Windows
+
+Run `organizer.exe`, then:
+
+```bash
+organizer.exe --install-autostart
+```
+
 That's it. Your files will now be organized automatically.
+
+## Quick Test
+
+After installation, try:
+
+```bash
+touch ~/Downloads/test.jpg
+```
+
+You should see it move into:
+
+```text
+Downloads/Images/test.jpg
+```
 
 ## For Users
 
@@ -156,6 +178,8 @@ Background runs write logs to:
 logs/organizer.log
 ```
 
+This log file is created in the same folder where the executable is run.
+
 ## For Developers
 
 ### Requirements
@@ -274,3 +298,4 @@ python -m unittest discover -s tests -v
 - The organizer only moves top-level files in the watched folder during startup scan.
 - Duplicate names are preserved by renaming instead of overwriting.
 - Temporary download files are ignored until the real file appears.
+- Files may not move immediately if they are still being downloaded.

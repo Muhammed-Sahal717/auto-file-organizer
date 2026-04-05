@@ -107,20 +107,28 @@ def get_running_pid(pid_file_path=PID_FILE_PATH):
     return None
 
 
-def wait_for_stable_file(path, checks=3, delay_seconds=0.5) -> bool:
+def wait_for_stable_file(path, checks=3, delay_seconds=0.5, missing_tolerance=2) -> bool:
     file_path = Path(path)
     previous_size = None
     stable_reads = 0
+    missing_reads = 0
     max_attempts = max((checks * 4), 8)
 
     for _ in range(max_attempts):
         if not file_path.exists():
-            return False
+            missing_reads += 1
+            if missing_reads > missing_tolerance:
+                return False
+            time.sleep(delay_seconds)
+            continue
+
+        missing_reads = 0
 
         try:
             current_size = file_path.stat().st_size
         except OSError:
-            return False
+            time.sleep(delay_seconds)
+            continue
 
         if current_size == previous_size:
             stable_reads += 1

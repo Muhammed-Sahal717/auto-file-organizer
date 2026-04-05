@@ -1,9 +1,10 @@
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from rules import RuleEngine
-from watcher import organize_existing_files
+from watcher import OrganizerEventHandler, organize_existing_files
 
 
 class ExistingFileScanTests(unittest.TestCase):
@@ -62,6 +63,58 @@ class ExistingFileScanTests(unittest.TestCase):
             self.assertEqual(organized_count, 1)
             self.assertTrue((root / "notes.pdf").exists())
             self.assertFalse((root / "PDFs").exists())
+
+
+class WatcherEventTests(unittest.TestCase):
+    def setUp(self):
+        self.engine = RuleEngine(
+            rules={
+                "Images": [".jpg", ".png"],
+                "PDFs": [".pdf"],
+            },
+            default_category="Others",
+            ignored_extensions=[".tmp", ".crdownload"],
+        )
+
+    def test_moved_file_into_top_level_is_organized(self):
+        handler = OrganizerEventHandler(
+            watch_path="/tmp/watch-root",
+            rule_engine=self.engine,
+            stability_checks=0,
+            stability_delay=0,
+        )
+        event = mock.Mock(
+            is_directory=False,
+            src_path="/tmp/watch-root/file.crdownload",
+            dest_path="/tmp/watch-root/photo.jpg",
+        )
+
+        with mock.patch("watcher.organize_file") as organize_file_mock:
+            handler.handle_moved(event)
+
+        organize_file_mock.assert_called_once()
+        self.assertEqual(
+            organize_file_mock.call_args.kwargs["src_path"],
+            Path("/tmp/watch-root/photo.jpg"),
+        )
+
+    def test_moved_file_into_subfolder_is_ignored(self):
+        handler = OrganizerEventHandler(
+            watch_path="/tmp/watch-root",
+            rule_engine=self.engine,
+            stability_checks=0,
+            stability_delay=0,
+        )
+        event = mock.Mock(
+            is_directory=False,
+            src_path="/tmp/watch-root/photo.jpg",
+            dest_path="/tmp/watch-root/Images/photo.jpg",
+        )
+
+        with mock.patch("watcher.organize_file") as organize_file_mock:
+            handler.handle_moved(event)
+
+        organize_file_mock.assert_not_called()
 
 
 if __name__ == "__main__":
